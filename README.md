@@ -23,4 +23,4 @@ go-scraper -t <URL>
 
 `mail` : scrap all the mailto: links
 
-`style` : scrap all stylesheets imported
+`style` : scrap all imported stylesheets
