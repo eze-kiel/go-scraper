@@ -24,3 +24,5 @@ go-scraper -t <URL>
 `mail` : scrap all the mailto: links
 
 `style` : scrap all imported stylesheets
+
+`comments` : scrap all HTML comments
