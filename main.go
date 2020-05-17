@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -31,10 +32,20 @@ func main() {
 	}
 	defer response.Body.Close()
 
-	// Create a goquery document from the HTTP response
-	document, err := goquery.NewDocumentFromReader(response.Body)
-	if err != nil {
-		log.Fatal("Error loading HTTP response body. ", err)
+	var document *goquery.Document
+	var body []byte
+
+	if contentType == "comments" {
+		body, err = ioutil.ReadAll(response.Body)
+		if err != nil {
+			log.Fatal("Error reading HTTP body. ", err)
+		}
+	} else {
+		// Create a goquery document from the HTTP response
+		document, err = goquery.NewDocumentFromReader(response.Body)
+		if err != nil {
+			log.Fatal("Error loading HTTP response body. ", err)
+		}
 	}
 
 	// Process the desired content
@@ -49,6 +60,8 @@ func main() {
 		document.Find("a").Each(process.Mail)
 	case "style":
 		document.Find("link").Each(process.Style)
+	case "comments":
+		process.Comments(body)
 	default:
 		color.Red("This type is not recognised")
 		os.Exit(1)

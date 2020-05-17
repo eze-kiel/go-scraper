@@ -2,6 +2,7 @@ package process
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -48,5 +49,18 @@ func Style(index int, element *goquery.Selection) {
 		if exists {
 			fmt.Println(style)
 		}
+	}
+}
+
+// Comments looks for comments tags in the source code via regex and add them to an array
+func Comments(body []byte) {
+	re := regexp.MustCompile("<!--(.|\n)*?-->")
+	comments := re.FindAllString(string(body), -1)
+	if comments == nil {
+		return
+	}
+
+	for _, comment := range comments {
+		fmt.Println(comment)
 	}
 }
